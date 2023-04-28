@@ -5,11 +5,13 @@ import Navbar from "./Components/Navbar/Navbar";
 import SideBar from "./Components/SideBar/SideBar";
 import InputMessage from "./Components/InputMessage/InputMessage";
 import Signup from "./Signup";
+import Login from "./Login";
 
 function App() {
   return (
     <div className="home">
       <Signup></Signup>
+      {/* <Login></Login> */}
       {/* <Chat></Chat> */}
     </div>
   );
