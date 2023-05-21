@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import img from "../../assets/image/profile-photo.jpg";
 import icon from "../../assets/image/chat.png";
 import Avatar from "@mui/material/Avatar";
@@ -7,8 +7,10 @@ import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import { Box, Grid, Typography } from "@mui/material";
+import { Context } from "../../Context/AuthContext";
 
 const Navbar = () => {
+  const { currentUser } = useContext(Context);
   return (
     <Grid
       container
@@ -33,16 +35,16 @@ const Navbar = () => {
       </Grid>
       <Grid item xs={7} md={8} sx={{}}>
         <Typography variant="button" noWrap color={"#FFF8DC"}>
-          John Wayne
+          {currentUser.displayName}
         </Typography>
       </Grid>
       <Grid item xs={3} md={2} sx={{}}>
         <Avatar
           alt="your photo"
-          src={img}
+          src={currentUser.photoURL}
           sx={{
-            width: 35,
-            height: 35,
+            width: 40,
+            height: 40,
             cursor: "pointer",
           }}
         />

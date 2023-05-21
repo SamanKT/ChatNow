@@ -17,6 +17,8 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import { signOut } from "firebase/auth";
+import { auth } from "../../Firebase";
 
 const Chat = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -24,6 +26,14 @@ const Chat = () => {
     setAnchorEl(e.currentTarget);
   };
   const open = Boolean(anchorEl);
+
+  const handleSignOut = async (e) => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
   return (
     <Container sx={{ width: "80vw" }}>
       <Grid
@@ -97,7 +107,9 @@ const Chat = () => {
                     }}
                     onClose={() => setAnchorEl(null)}
                   >
-                    <Button color="inherit">Logout</Button>
+                    <Button color="inherit" onClick={handleSignOut}>
+                      Logout
+                    </Button>
                   </Popover>
                 </Box>
               </Toolbar>

@@ -14,9 +14,15 @@ import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import CircularProgressWithLabel from "./Components/LoadingComponent/CircularProgressWithLabel";
 import { storage } from "./Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
+import AlertMUI from "./Components/Alerts/Alert";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [openAlert, setOpenAlert] = useState(false);
+
   const handleLogin = async (e) => {
+    setOpenAlert(false);
     e.preventDefault();
 
     const email = e.target[0].value;
@@ -24,8 +30,9 @@ const Login = () => {
 
     try {
       const userCreds = await signInWithEmailAndPassword(auth, email, password);
-      if (userCreds.user) alert("the login is successful");
+      navigate("/");
     } catch (error) {
+      setOpenAlert(true);
       console.log(error.code);
     }
   };
@@ -41,111 +48,116 @@ const Login = () => {
     alignItems: "center",
   };
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        backgroundColor: "#103644",
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
-      <Box
-        sx={{
-          bgcolor: "lightblue",
-          height: "400px",
-          width: "350px",
-          borderRadius: "10px",
+    <>
+      <div
+        style={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
           justifyContent: "center",
-          marginTop: "20vh",
-          boxShadow: "10",
+          backgroundColor: "#103644",
+          width: "100vw",
+          height: "100vh",
         }}
       >
-        <div
-          style={{
-            backgroundColor: "#22A4D4",
+        <Box
+          sx={{
+            bgcolor: "lightblue",
+            height: "400px",
+            width: "350px",
+            borderRadius: "10px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            margin: "50px",
-            width: "80%",
-            height: "80px",
-            borderRadius: "10px",
-            boxShadow:
-              " rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
+            marginTop: "20vh",
+            boxShadow: "10",
           }}
         >
-          <div style={{ display: "flex" }}>
-            <Avatar
-              src={icon}
-              alt=""
-              sx={{
-                borderRadius: "10%",
-                objectFit: "cover",
-                height: "25px",
-                width: "25px",
-                mr: "10px",
-              }}
-            />
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-              {" "}
-              ChatNow!
-            </Typography>
-          </div>
-          <Typography variant="body2" sx={{ mt: "8px" }}>
-            Login
-          </Typography>
-        </div>
-        <form
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "start",
-            alignItems: "center",
-            width: "90%",
-            height: "65%",
-          }}
-          onSubmit={handleLogin}
-        >
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Enter your email"
-            style={inputStyle}
-          />
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="password"
-            style={inputStyle}
-          />
-
-          <button
-            type="submit"
+          <div
             style={{
-              backgroundColor: "#618593",
-              color: "white",
-              width: "70%",
-              margin: "10px",
-              fontSize: "12px",
-              height: "25px",
+              backgroundColor: "#22A4D4",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "50px",
+              width: "80%",
+              height: "80px",
+              borderRadius: "10px",
+              boxShadow:
+                " rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
             }}
           >
-            Login
-          </button>
+            <div style={{ display: "flex" }}>
+              <Avatar
+                src={icon}
+                alt=""
+                sx={{
+                  borderRadius: "10%",
+                  objectFit: "cover",
+                  height: "25px",
+                  width: "25px",
+                  mr: "10px",
+                }}
+              />
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                {" "}
+                ChatNow!
+              </Typography>
+            </div>
+            <Typography variant="body2" sx={{ mt: "8px" }}>
+              Login
+            </Typography>
+          </div>
+          <form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "start",
+              alignItems: "center",
+              width: "90%",
+              height: "65%",
+            }}
+            onSubmit={handleLogin}
+          >
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+              style={inputStyle}
+            />
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="password"
+              required
+              style={inputStyle}
+            />
 
-          <Typography variant="caption" sx={{ fontSize: "10px" }}>
-            <a href="">Not having account? click to sign up!</a>
-          </Typography>
-        </form>
-      </Box>
-    </div>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#618593",
+                color: "white",
+                width: "70%",
+                margin: "10px",
+                fontSize: "12px",
+                height: "25px",
+              }}
+            >
+              Login
+            </button>
+
+            <Typography variant="caption" sx={{ fontSize: "10px" }}>
+              <a href="/signup">Not having account? click to sign up!</a>
+            </Typography>
+          </form>
+        </Box>
+      </div>
+      <AlertMUI open={openAlert} mode={2} />
+    </>
   );
 };
 

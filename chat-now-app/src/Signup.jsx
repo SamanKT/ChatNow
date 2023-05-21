@@ -1,19 +1,17 @@
-import {
-  Avatar,
-  Box,
-  CircularProgress,
-  Container,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, CircularProgress, Typography } from "@mui/material";
 import icon from "./assets/image/chat.png";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PortraitIcon from "@mui/icons-material/Portrait";
 import { auth } from "./Firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import CircularProgressWithLabel from "./Components/LoadingComponent/CircularProgressWithLabel";
 import { storage } from "./Firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "./Firebase";
+//import cat1 from "https://firebasestorage.googleapis.com/v0/b/chat-61303.appspot.com/o/default%2Fcat-avatar.jpg?alt=media&token=c250b80d-0a55-481d-afc1-a07e1409a15e";
+import { useNavigate } from "react-router-dom";
+import AlertMUI from "./Components/Alerts/Alert";
 
 const Signup = () => {
   const [progress, setProgress] = useState(0);
@@ -21,6 +19,10 @@ const Signup = () => {
   const [imageSelected, setImageSelected] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [loadingShow, setLoadingShow] = useState(false);
+  const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
+
+  const navigate = useNavigate();
+
   const handleImageSelect = (e) => {
     setLoadingShow(true);
 
@@ -36,12 +38,13 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUploadStarted(true);
+
     const name = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
-    const file = e.target[3].files[0];
+    let file = e.target[3].files[0];
 
+    setUploadStarted(true);
     const userCreds = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -52,7 +55,7 @@ const Signup = () => {
       contentType: "image/jpeg",
     };
 
-    // Upload file and metadata to the object 'images/mountains.jpg'
+    // Upload file and metadata to the object 'images/{image name}'
     const storageRef = ref(storage, "images/" + name);
     const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
@@ -64,20 +67,36 @@ const Signup = () => {
         setProgress((prev) => {
           const newProgress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          return newProgress;
+          return newProgress > 0 ? newProgress : 100;
         });
       },
       (error) => {},
       () => {
         // Upload completed successfully, now we can get the download URL
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          updateProfile(userCreds.user, {
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          await updateProfile(userCreds.user, {
             displayName: name,
-            photoURL: downloadURL,
+            photoURL: file
+              ? downloadURL
+              : "https://firebasestorage.googleapis.com/v0/b/chat-61303.appspot.com/o/default%2Fcat-avatar.jpg?alt=media&token=c250b80d-0a55-481d-afc1-a07e1409a15e",
           });
+          await setDoc(doc(db, "users", userCreds.user.uid), {
+            name: userCreds.user.displayName,
+            photoURL: userCreds.user.photoURL,
+            email: userCreds.user.email,
+          });
+
+          await setDoc(doc(db, "userChats", userCreds.user.uid), {});
+
           e.target.reset(); // to reset the form after uploading is finished
+
           setUploadStarted(false);
           setImageSelected(false);
+          setOpenSuccessAlert(true);
+          setInterval(() => {
+            navigate("/");
+            window.location.reload(true);
+          }, 3000);
         });
       }
     );
@@ -97,6 +116,7 @@ const Signup = () => {
     <div
       style={{
         display: "flex",
+
         justifyContent: "center",
         backgroundColor: "#103644",
         width: "100vw",
@@ -169,6 +189,7 @@ const Signup = () => {
             name="name"
             id="name"
             placeholder="Enter your name"
+            required
             style={inputStyle}
           />
           <input
@@ -176,6 +197,7 @@ const Signup = () => {
             name="email"
             id="email"
             placeholder="Enter your email"
+            required
             style={inputStyle}
           />
           <input
@@ -183,6 +205,7 @@ const Signup = () => {
             name="password"
             id="password"
             placeholder="password"
+            required
             style={inputStyle}
           />
           <div
@@ -225,13 +248,8 @@ const Signup = () => {
               variant="caption"
               sx={{ color: "gray", ml: "5px", mr: "30px" }}
             >
-              Add your avatar
+              Add avatar (optional)
             </Typography>
-            {uploadStarted && (
-              <CircularProgressWithLabel
-                value={progress}
-              ></CircularProgressWithLabel>
-            )}
           </div>
           <input
             type="file"
@@ -241,24 +259,33 @@ const Signup = () => {
             accept="image/*"
             onChange={handleImageSelect}
           />
-          <button
-            type="submit"
-            style={{
-              backgroundColor: "#618593",
-              color: "white",
-              width: "70%",
-              margin: "10px",
-              fontSize: "12px",
-              height: "25px",
-            }}
-          >
-            Submit
-          </button>
 
-          <Typography variant="caption" sx={{ fontSize: "10px" }}>
-            <a href="">Already registered? click to sign in!</a>
+          {uploadStarted ? (
+            <CircularProgressWithLabel
+              value={progress}
+              sx={{ zIndex: "3" }}
+            ></CircularProgressWithLabel>
+          ) : (
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#618593",
+                color: "white",
+                width: "70%",
+                margin: "10px",
+                fontSize: "12px",
+                height: "25px",
+              }}
+            >
+              Submit
+            </button>
+          )}
+
+          <Typography variant="caption" sx={{ fontSize: "10px", mb: "8px" }}>
+            <a href="/login">Already registered? click to sign in!</a>
           </Typography>
         </form>
+        <AlertMUI open={openSuccessAlert} mode={1} />
       </Box>
     </div>
   );
