@@ -49,26 +49,53 @@ export const getAllUsers = async () => {
   return users;
 };
 
-export const createChatIfNotExistOrGetMessages = async (idOne, idTwo) => {
-  const combinedIds = idOne < idTwo ? idOne + idTwo : idTwo + idOne;
-  const docRef = doc(db, "userChats", idOne);
+export const createChatIfNotExistOrGetLastMessage = async (
+  currentUser,
+  friend
+) => {
+  const combinedIds =
+    currentUser.uid < friend.uid
+      ? currentUser.uid + friend.uid
+      : friend.uid + currentUser.uid;
+  const docRef = doc(db, "userChats", currentUser.uid);
   const docSnap = await getDoc(docRef);
+
   const chats = docSnap.data();
-  if (!chats[combinedIds]) {
-    const refOwner = doc(db, "userChats", idOne);
-    const refPartner = doc(db, "userChats", idTwo);
+  await setDoc(doc(db, "chats", combinedIds), {});
+  if (!chats[friend.uid]) {
+    const refOwner = doc(db, "userChats", currentUser.uid);
+    const refPartner = doc(db, "userChats", friend.uid);
+
     await updateDoc(
       refOwner,
-      { [combinedIds]: { messages: [] } },
+      {
+        [friend.uid]: {
+          lastMessages: {},
+          friendInfo: {
+            name: friend.name,
+            photoURL: friend.photoURL,
+            uid: friend.uid,
+          },
+        },
+      },
       { merge: true }
     );
     await updateDoc(
       refPartner,
-      { [combinedIds]: { messages: [] } },
+      {
+        [currentUser.uid]: {
+          lastMessages: {},
+          friendInfo: {
+            name: currentUser.displayName,
+            photoURL: currentUser.photoURL,
+            uid: currentUser.uid,
+          },
+        },
+      },
       { merge: true }
     );
   }
-  return chats[combinedIds];
+  return chats;
 };
 export const getAllChatsOfUser = async (id) => {
   let chats = {};

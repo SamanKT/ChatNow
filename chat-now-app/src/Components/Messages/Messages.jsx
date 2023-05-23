@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import InputMessage from "../InputMessage/InputMessage";
 import { AppBar, Toolbar } from "@mui/material";
 import Message from "./Message";
+import { ChatContext } from "../../Context/ChatContext";
 
 const Messages = () => {
+  const { friend } = useContext(ChatContext);
+  console.log(friend);
+
   return (
     <div
       style={{

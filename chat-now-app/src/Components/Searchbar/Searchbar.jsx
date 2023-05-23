@@ -34,7 +34,7 @@ const Searchbar = ({ users, setPeople }) => {
         variant="standard"
         onInput={(e) => {
           const filteredUsers = users.filter((user) =>
-            user
+            user.name
               .toLowerCase()
               .trim()
               .includes(e.target.value.toLowerCase().trim())
