@@ -1,7 +1,7 @@
 import { Autocomplete, Stack, TextField } from "@mui/material";
 import React from "react";
 
-const Searchbar = ({ users, setPeople }) => {
+const Searchbar = ({ users, setPeople, friends, setFriends }) => {
   return (
     <Stack spacing={1} sx={{ paddingRight: "8px" }}>
       {/* <Autocomplete
@@ -33,11 +33,13 @@ const Searchbar = ({ users, setPeople }) => {
         label="People"
         variant="standard"
         onInput={(e) => {
-          const filteredUsers = users.filter((user) =>
-            user.name
-              .toLowerCase()
-              .trim()
-              .includes(e.target.value.toLowerCase().trim())
+          const filteredUsers = users.filter(
+            (user) =>
+              user.name
+                .toLowerCase()
+                .trim()
+                .includes(e.target.value.toLowerCase().trim()) &&
+              !Object.keys(friends).includes(user.uid)
           );
           setPeople(filteredUsers);
         }}

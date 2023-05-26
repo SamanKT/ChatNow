@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import SideBar from "../SideBar/SideBar";
 import InputMessage from "../InputMessage/InputMessage";
 import Messages from "../Messages/Messages";
@@ -19,9 +19,11 @@ import {
 import Grid from "@mui/material/Grid";
 import { signOut } from "firebase/auth";
 import { auth } from "../../Firebase";
+import { ChatContext } from "../../Context/ChatContext";
 
 const Chat = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const { friend } = useContext(ChatContext);
   const handlePop = (e) => {
     setAnchorEl(e.currentTarget);
   };
@@ -77,42 +79,55 @@ const Chat = () => {
               }}
               elevation={0}
             >
-              <Toolbar
-                sx={{
-                  minHeight: "20px",
-                  height: "35px",
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "96%",
                 }}
-                disableGutters
-                variant="dense"
               >
-                <VideocamIcon sx={{ cursor: "pointer" }} />
-                <AddIcCallIcon sx={{ ml: "10px", cursor: "pointer" }} />
-                <Box>
-                  <IconButton
-                    size="medium"
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                    onClick={handlePop}
-                    sx={{ ml: "6px" }}
-                  >
-                    <MoreIcon />
-                  </IconButton>
-                  <Popover
-                    anchorEl={anchorEl}
-                    open={open}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "left",
-                    }}
-                    onClose={() => setAnchorEl(null)}
-                  >
-                    <Button color="inherit" onClick={handleSignOut}>
-                      Logout
-                    </Button>
-                  </Popover>
-                </Box>
-              </Toolbar>
+                <Typography variant="body2">
+                  {friend?.friend.friendInfo?.name}
+                </Typography>
+
+                <Toolbar
+                  sx={{
+                    minHeight: "20px",
+                    height: "35px",
+                  }}
+                  disableGutters
+                  variant="dense"
+                >
+                  <VideocamIcon sx={{ cursor: "pointer" }} />
+                  <AddIcCallIcon sx={{ ml: "10px", cursor: "pointer" }} />
+                  <Box>
+                    <IconButton
+                      size="medium"
+                      edge="start"
+                      color="inherit"
+                      aria-label="menu"
+                      onClick={handlePop}
+                      sx={{ ml: "6px" }}
+                    >
+                      <MoreIcon />
+                    </IconButton>
+                    <Popover
+                      anchorEl={anchorEl}
+                      open={open}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left",
+                      }}
+                      onClose={() => setAnchorEl(null)}
+                    >
+                      <Button color="inherit" onClick={handleSignOut}>
+                        Logout
+                      </Button>
+                    </Popover>
+                  </Box>
+                </Toolbar>
+              </div>
             </AppBar>
           </Box>
           <Messages></Messages>

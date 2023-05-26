@@ -1,12 +1,34 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import InputMessage from "../InputMessage/InputMessage";
-import { AppBar, Toolbar } from "@mui/material";
 import Message from "./Message";
 import { ChatContext } from "../../Context/ChatContext";
-
+import { db } from "../../Firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+import "../../messageStyles.css";
 const Messages = () => {
-  const { friend } = useContext(ChatContext);
-  console.log(friend);
+  const { friend, currentUser } = useContext(ChatContext);
+  const [messages, setMessages] = useState([]);
+  const [disableSend, setDisableSend] = useState(false);
+
+  useEffect(() => {
+    let unsub = () => {};
+
+    if (friend.combinedId) {
+      const ref = doc(db, "chats", friend.combinedId);
+
+      unsub = onSnapshot(ref, (doc) => {
+        let data = doc?.data();
+        data = { ...data };
+        setMessages(data.messages);
+      });
+
+      setDisableSend(false);
+    } else setDisableSend(true);
+
+    return () => {
+      unsub();
+    };
+  }, [friend.combinedId]);
 
   return (
     <div
@@ -15,14 +37,32 @@ const Messages = () => {
         flexDirection: "column",
       }}
     >
-      <div style={{ height: "calc(85vh - 85px)", overflowY: "scroll" }}>
-        <Message />
-        <Message owner={true} />
-        <Message />
-        <Message />
-        <Message />
+      <div
+        className="scroll"
+        style={{
+          height: "calc(85vh - 85px)",
+          overflowY: "auto",
+        }}
+      >
+        {messages?.length > 0 &&
+          messages.map((message) => {
+            return (
+              <Message
+                owner={currentUser.uid === message.senderId ? true : false}
+                body={message.body}
+                photoUrl={
+                  currentUser.uid === message.senderId
+                    ? currentUser.photoURL
+                    : friend.friend.friendInfo.photoURL
+                }
+                image={message.file}
+                date={message.time}
+                key={message.id}
+              />
+            );
+          })}
       </div>
-      <InputMessage></InputMessage>
+      <InputMessage disableSend={disableSend}></InputMessage>
     </div>
   );
 };

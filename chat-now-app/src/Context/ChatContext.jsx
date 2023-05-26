@@ -25,7 +25,7 @@ export const ChatContextProvider = ({ children }) => {
     });
 
     const fetchingChats = async () => {
-      const fetchedChats = await getAllChatsOfUser(currentUser.uid);
+      const fetchedChats = await getAllChatsOfUser(currentUser?.uid);
 
       setChats(fetchedChats);
     };

@@ -5,17 +5,22 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useEffect } from "react";
 
 export default function ImageAlert({
   img,
+  setImg,
   text,
   handleMessageSend,
   open,
   setOpen,
   setText,
+  handleClearImgInput,
 }) {
   const handleClose = () => {
     setOpen(false);
+    handleClearImgInput();
+    setImg("");
   };
   let imgUrl = "";
   if (img) imgUrl = URL.createObjectURL(img);
@@ -44,7 +49,14 @@ export default function ImageAlert({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleMessageSend}>Send</Button>
+          <Button
+            onClick={(e) => {
+              handleMessageSend(e);
+              setOpen(false);
+            }}
+          >
+            Send
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { Button } from "@mui/material";
 import img from "../../assets/image/cat-avatar.jpg";
@@ -9,12 +9,13 @@ import { db, storage } from "../../Firebase";
 import ImageAlert from "../Alerts/ImageAlert";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
-const InputMessage = () => {
+const InputMessage = ({ disableSend }) => {
   const { friend, currentUser } = useContext(ChatContext);
-
   const [text, setText] = useState("");
   const [img, setImg] = useState("");
   const [open, setOpen] = useState(false);
+  const refToFileInput = useRef();
+
   const handleMessageSend = async (e) => {
     e.preventDefault();
     const messageId = uuidv4();
@@ -31,19 +32,24 @@ const InputMessage = () => {
       (error) => {},
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          await updateDoc(doc(db, "chats", friend.combinedId), {
-            messages: arrayUnion({
-              id: messageId,
-              time: Timestamp.now(),
-              senderId: currentUser.uid,
-              body: text,
-              file: downloadURL,
-            }),
-          });
+          if (img || text) {
+            await updateDoc(doc(db, "chats", friend.combinedId), {
+              messages: arrayUnion({
+                id: messageId,
+                time: Timestamp.now(),
+                senderId: currentUser.uid,
+                body: text,
+                file: img ? downloadURL : "",
+              }),
+            });
+          }
           setText("");
         });
       }
     );
+  };
+  const handleClearImgInput = () => {
+    refToFileInput.current.value = "";
   };
 
   return (
@@ -76,6 +82,7 @@ const InputMessage = () => {
         />
 
         <input
+          ref={refToFileInput}
           type="file"
           name="attachFile"
           id="attachFile"
@@ -103,6 +110,7 @@ const InputMessage = () => {
             },
             mr: "20px",
           }}
+          disabled={disableSend}
         >
           Send
         </Button>
@@ -110,10 +118,12 @@ const InputMessage = () => {
       <ImageAlert
         handleMessageSend={handleMessageSend}
         img={img}
+        setImg={setImg}
         text={text}
         open={open}
         setOpen={setOpen}
         setText={setText}
+        handleClearImgInput={handleClearImgInput}
       ></ImageAlert>
     </div>
   );

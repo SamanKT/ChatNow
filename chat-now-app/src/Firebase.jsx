@@ -39,7 +39,7 @@ export const getAllUsers = async () => {
     const querySnapshot = await getDocs(collection(db, "users"));
     querySnapshot.forEach((doc) => {
       const dataFromDb = doc.data();
-      const data = { ...dataFromDb, uid: doc.id, messages: [] };
+      const data = { ...dataFromDb, uid: doc.id };
       users.push(data);
     });
   } catch (err) {
@@ -59,27 +59,24 @@ export const createChatIfNotExistOrGetLastMessage = async (
       : friend.uid + currentUser.uid;
   const docRef = doc(db, "userChats", currentUser.uid);
   const docSnap = await getDoc(docRef);
-
+  let friendObject = {};
   const chats = docSnap.data();
   await setDoc(doc(db, "chats", combinedIds), {});
   if (!chats[friend.uid]) {
     const refOwner = doc(db, "userChats", currentUser.uid);
     const refPartner = doc(db, "userChats", friend.uid);
-
-    await updateDoc(
-      refOwner,
-      {
-        [friend.uid]: {
-          lastMessages: {},
-          friendInfo: {
-            name: friend.name,
-            photoURL: friend.photoURL,
-            uid: friend.uid,
-          },
+    friendObject = {
+      [friend.uid]: {
+        lastMessages: {},
+        friendInfo: {
+          name: friend.name,
+          photoURL: friend.photoURL,
+          uid: friend.uid,
         },
       },
-      { merge: true }
-    );
+    };
+
+    await updateDoc(refOwner, friendObject, { merge: true });
     await updateDoc(
       refPartner,
       {
@@ -95,7 +92,7 @@ export const createChatIfNotExistOrGetLastMessage = async (
       { merge: true }
     );
   }
-  return chats;
+  return friendObject;
 };
 export const getAllChatsOfUser = async (id) => {
   let chats = {};
