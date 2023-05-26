@@ -44,6 +44,11 @@ export const ChatContextProvider = ({ children }) => {
               : action.payload.friendInfo.uid + currentUser.uid,
           friend: action.payload,
         };
+      case "RESET_CHAT":
+        return {
+          combinedId: "",
+          friend: {},
+        };
 
       default:
         return state;

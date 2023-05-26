@@ -3,7 +3,14 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { Button } from "@mui/material";
 import img from "../../assets/image/cat-avatar.jpg";
 import { ChatContext } from "../../Context/ChatContext";
-import { updateDoc, doc, Timestamp, arrayUnion } from "firebase/firestore";
+import {
+  updateDoc,
+  setDoc,
+  doc,
+  Timestamp,
+  arrayUnion,
+  serverTimestamp,
+} from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { db, storage } from "../../Firebase";
 import ImageAlert from "../Alerts/ImageAlert";
@@ -42,6 +49,20 @@ const InputMessage = ({ disableSend }) => {
                 file: img ? downloadURL : "",
               }),
             });
+            const currentUid = currentUser.uid;
+
+            await setDoc(
+              doc(db, "userChats", friend.friend.friendInfo.uid),
+              {
+                [currentUid]: {
+                  lastMessages: {
+                    body: text,
+                    timestamp: serverTimestamp(),
+                  },
+                },
+              },
+              { merge: true }
+            );
           }
           setText("");
         });

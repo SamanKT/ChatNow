@@ -20,14 +20,12 @@ const SideBar = () => {
   const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     setPeople(users);
-
     const getFreinds = async () => {
       const friends = await getAllChatsOfUser(currentUser?.uid);
       setFriends(friends);
     };
     getFreinds();
-  }, [users, refresh]);
-
+  }, [users, refresh, currentUser]);
   const handleSelectUser = async (selectedUser) => {
     const friendObj = await createChatIfNotExistOrGetLastMessage(
       currentUser,
@@ -39,7 +37,6 @@ const SideBar = () => {
   const handleSelectFriend = async (selectedUser) => {
     dispatch({ type: "SET_CHAT", payload: selectedUser });
   };
-
   return (
     <>
       <Navbar></Navbar>
@@ -53,45 +50,48 @@ const SideBar = () => {
         Friends
       </Typography>
       <div className="scroll" style={{ overflowY: "auto" }}>
-        {Object.keys(friends).map((key) => {
-          return (
-            currentUser.uid !== friends[key]?.friendInfo.uid && (
-              <Card
-                key={friends[key]?.friendInfo.uid}
-                elevation={0}
-                sx={{
-                  bgcolor: "inherit",
-                  opacity: "0.8",
-                  cursor: "pointer",
-                  "&:hover": {
-                    bgcolor: "#696969",
-                  },
-                }}
-                onClick={() => handleSelectFriend(friends[key])}
-              >
-                <CardHeader
-                  avatar={
-                    <Avatar
-                      sx={{ bgcolor: "inherit" }}
-                      src={friends[key]?.friendInfo.photoURL}
-                    ></Avatar>
-                  }
-                  action={<IconButton aria-label="settings"></IconButton>}
-                  title={friends[key]?.friendInfo.name}
-                  subheader={
-                    // friends[key]?.messages[friends[key].messages.length - 1]
-                    "Hello"
-                  }
-                  subheaderTypographyProps={{
-                    color: "#FFF8DC",
-                    fontSize: "12px",
+        {Object.keys(friends)
+          .sort(
+            (x, y) =>
+              friends[y].lastMessages.timestamp -
+              friends[x].lastMessages.timestamp
+          )
+          .map((key) => {
+            return (
+              currentUser?.uid !== friends[key]?.friendInfo?.uid && (
+                <Card
+                  key={friends[key]?.friendInfo.uid}
+                  elevation={0}
+                  sx={{
+                    bgcolor: "inherit",
+                    opacity: "0.8",
+                    cursor: "pointer",
+                    "&:hover": {
+                      bgcolor: "#696969",
+                    },
                   }}
-                  sx={{ color: "#FFF8DC" }}
-                />
-              </Card>
-            )
-          );
-        })}
+                  onClick={() => handleSelectFriend(friends[key])}
+                >
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        sx={{ bgcolor: "inherit" }}
+                        src={friends[key]?.friendInfo.photoURL}
+                      ></Avatar>
+                    }
+                    action={<IconButton aria-label="settings"></IconButton>}
+                    title={friends[key]?.friendInfo.name}
+                    subheader={friends[key]?.lastMessages.body}
+                    subheaderTypographyProps={{
+                      color: "#FFF8DC",
+                      fontSize: "12px",
+                    }}
+                    sx={{ color: "#FFF8DC" }}
+                  />
+                </Card>
+              )
+            );
+          })}
       </div>
       <Typography variant="subtitle2" noWrap sx={{ mt: 3, color: "#FFF8DC" }}>
         People

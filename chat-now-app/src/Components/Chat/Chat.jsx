@@ -23,7 +23,8 @@ import { ChatContext } from "../../Context/ChatContext";
 
 const Chat = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { friend } = useContext(ChatContext);
+  const { friend, dispatch } = useContext(ChatContext);
+
   const handlePop = (e) => {
     setAnchorEl(e.currentTarget);
   };
@@ -32,6 +33,7 @@ const Chat = () => {
   const handleSignOut = async (e) => {
     try {
       await signOut(auth);
+      dispatch({ type: "RESET_CHAT", payload: {} });
     } catch (error) {
       console.log("error", error);
     }

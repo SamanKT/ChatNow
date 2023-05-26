@@ -36,35 +36,45 @@ const Message = ({ owner, body, photoUrl, date, image }) => {
       </div>
       <div
         style={{
-          width: "fit-content",
-          height: "fit-content",
-          minHeight: "25px",
-          maxWidth: "50%",
-          minWidth: "20%",
-          backgroundColor: owner ? "#D9D28D " : "white",
-          borderRadius: "8px 0 8px 0",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          width: "100%",
+          alignItems: owner ? "flex-start" : "flex-end",
         }}
       >
+        <div
+          style={{
+            width: "fit-content",
+            height: "fit-content",
+            minHeight: "25px",
+            maxWidth: "50%",
+            minWidth: "20%",
+            backgroundColor: owner ? "#D9D28D " : "white",
+            borderRadius: "8px 0 8px 0",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{ ml: "5px", wordWrap: "break-word" }}
+          >
+            {body}
+          </Typography>
+          <img
+            src={image}
+            style={{ width: "150px", alignSelf: "center", borderRadius: 5 }}
+          ></img>
+        </div>
         <Typography
           variant="caption"
-          sx={{ ml: "5px", wordWrap: "break-word" }}
+          sx={{ color: "gray", ml: 1, mr: 1, fontSize: 9 }}
         >
-          {body}
+          {getDateWithCustomFormat(date)}
         </Typography>
-        <img
-          src={image}
-          style={{ width: "150px", alignSelf: "center", borderRadius: 5 }}
-        ></img>
       </div>
-      <Typography
-        variant="caption"
-        sx={{ color: "gray", ml: 1, mr: 1, fontSize: 9 }}
-      >
-        {getDateWithCustomFormat(date)}
-      </Typography>
     </div>
   );
 };

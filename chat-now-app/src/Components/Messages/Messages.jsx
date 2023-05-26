@@ -6,13 +6,12 @@ import { db } from "../../Firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import "../../messageStyles.css";
 const Messages = () => {
-  const { friend, currentUser } = useContext(ChatContext);
+  const { friend, currentUser, dispatch } = useContext(ChatContext);
   const [messages, setMessages] = useState([]);
   const [disableSend, setDisableSend] = useState(false);
 
   useEffect(() => {
     let unsub = () => {};
-
     if (friend.combinedId) {
       const ref = doc(db, "chats", friend.combinedId);
 
