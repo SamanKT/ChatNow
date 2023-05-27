@@ -8,7 +8,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function AlertMUI({ open, mode }) {
+export default function AlertMUI({ open, mode, message }) {
   const [myOpen, setOpen] = React.useState(open);
   React.useEffect(() => {
     setOpen(open);
@@ -22,20 +22,24 @@ export default function AlertMUI({ open, mode }) {
     setOpen(false);
   };
 
+  const AlertDeterminer = ({ mode2, message }) => {
+    return (
+      <Alert
+        onClose={handleClose}
+        severity={mode2 === 1 ? "success" : "error"}
+        sx={{ width: "100%" }}
+      >
+        {message}
+      </Alert>
+    );
+  };
+
   return (
     <Stack spacing={2} sx={{ width: "100%", justifyContent: "center" }}>
       <Snackbar open={myOpen} autoHideDuration={3000} onClose={handleClose}>
-        {mode === 1 ? (
-          <Alert
-            onClose={handleClose}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            You have logged in successfully!
-          </Alert>
-        ) : (
-          <Alert severity="error">User/Password not found!</Alert>
-        )}
+        <div>
+          <AlertDeterminer mode2={mode} message={message}></AlertDeterminer>
+        </div>
       </Snackbar>
       {/* 
       <Alert severity="warning">This is a warning message!</Alert>

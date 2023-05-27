@@ -156,7 +156,11 @@ const Login = () => {
           </form>
         </Box>
       </div>
-      <AlertMUI open={openAlert} mode={2} />
+      <AlertMUI
+        open={openAlert}
+        mode={2}
+        message={"Invalid Username or Password"}
+      />
     </>
   );
 };

@@ -19,7 +19,8 @@ const Signup = () => {
   const [imageSelected, setImageSelected] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [loadingShow, setLoadingShow] = useState(false);
-  const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
+  const [openAlert, setOpenAlert] = useState({ open: false, message: "" });
+  const [passLength, setPassLength] = useState("");
 
   const navigate = useNavigate();
 
@@ -35,9 +36,17 @@ const Signup = () => {
     fileReader.readAsDataURL(file);
     setImageSelected(true);
   };
-
+  console.log(passLength);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (passLength < 6) {
+      setOpenAlert({
+        open: true,
+        message: "The password must be at least 6 characters!",
+        mode: 2,
+      });
+      return;
+    }
 
     const name = e.target[0].value;
     const email = e.target[1].value;
@@ -72,7 +81,7 @@ const Signup = () => {
       },
       (error) => {},
       () => {
-        // Upload completed successfully, now we can get the download URL
+        // Upload completeenfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
           await updateProfile(userCreds.user, {
             displayName: name,
@@ -92,7 +101,11 @@ const Signup = () => {
 
           setUploadStarted(false);
           setImageSelected(false);
-          setOpenSuccessAlert(true);
+          setOpenAlert({
+            open: true,
+            message: "You have successfully registered!",
+            mode: 1,
+          });
           setInterval(() => {
             navigate("/");
             window.location.reload(true);
@@ -208,6 +221,7 @@ const Signup = () => {
             minLength={6}
             required
             style={inputStyle}
+            onChange={(e) => setPassLength(e.target.value.length)}
           />
           <div
             style={{
@@ -286,7 +300,11 @@ const Signup = () => {
             <a href="/login">Already registered? click to sign in!</a>
           </Typography>
         </form>
-        <AlertMUI open={openSuccessAlert} mode={1} />
+        <AlertMUI
+          open={openAlert.open}
+          mode={openAlert.mode}
+          message={openAlert.message}
+        />
       </Box>
     </div>
   );
