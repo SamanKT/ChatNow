@@ -12,20 +12,32 @@ import {
 } from "../../Firebase";
 import { ChatContext } from "../../Context/ChatContext";
 import "../../messageStyles.css";
+import { doc, onSnapshot } from "firebase/firestore";
+
 const SideBar = () => {
   const { users, currentUser } = useContext(Context);
   const { dispatch } = useContext(ChatContext);
   const [people, setPeople] = useState([]);
   const [friends, setFriends] = useState({});
   const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     setPeople(users);
     const getFreinds = async () => {
       const friends = await getAllChatsOfUser(currentUser?.uid);
       setFriends(friends);
     };
-    getFreinds();
-  }, [users, refresh, currentUser]);
+
+    const ref = doc(db, "userChats", currentUser?.uid);
+    let unsub = () => {};
+    unsub = onSnapshot(ref, (doc) => {
+      let data = doc?.data();
+      getFreinds();
+    });
+    return () => {
+      unsub();
+    };
+  }, [users, refresh]);
   const handleSelectUser = async (selectedUser) => {
     const friendObj = await createChatIfNotExistOrGetLastMessage(
       currentUser,

@@ -205,6 +205,7 @@ const Signup = () => {
             name="password"
             id="password"
             placeholder="password"
+            minLength={6}
             required
             style={inputStyle}
           />

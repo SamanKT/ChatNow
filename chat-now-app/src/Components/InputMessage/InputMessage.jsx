@@ -65,12 +65,15 @@ const InputMessage = ({ disableSend }) => {
             );
           }
           setText("");
+          handleClearImgInput();
         });
       }
     );
   };
   const handleClearImgInput = () => {
+    console.log("here");
     refToFileInput.current.value = "";
+    setImg("");
   };
 
   return (
@@ -83,7 +86,7 @@ const InputMessage = ({ disableSend }) => {
     >
       <form
         onSubmit={handleMessageSend}
-        style={{ width: "96%", display: "flex", flexDirection: "row" }}
+        style={{ width: "100%", display: "flex", flexDirection: "row" }}
       >
         <input
           type="text"

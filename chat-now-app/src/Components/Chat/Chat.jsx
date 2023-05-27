@@ -20,6 +20,7 @@ import Grid from "@mui/material/Grid";
 import { signOut } from "firebase/auth";
 import { auth } from "../../Firebase";
 import { ChatContext } from "../../Context/ChatContext";
+import "../../messageStyles.css";
 
 const Chat = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -39,7 +40,7 @@ const Chat = () => {
     }
   };
   return (
-    <Container sx={{ width: "80vw" }}>
+    <div className="mobileWidth">
       <Grid
         container
         spacing={1}
@@ -51,19 +52,20 @@ const Chat = () => {
           overflow: "hidden",
           backgroundColor: "#E1E1C8",
           flexWrap: "nowrap",
+          overflowX: "auto",
         }}
       >
         <Grid
           item
           xs={6}
           sm={4}
-          minWidth={250}
+          minWidth={200}
           maxWidth={300}
           sx={{ bgcolor: "#2F4F4F" }}
         >
           <SideBar></SideBar>
         </Grid>
-        <Grid item xs={6} sm={8} minWidth={250} sx={{}}>
+        <Grid item xs={6} sm={8} minWidth={280} sx={{}}>
           <Box
             sx={{
               flexGrow: 1,
@@ -135,7 +137,7 @@ const Chat = () => {
           <Messages></Messages>
         </Grid>
       </Grid>
-    </Container>
+    </div>
   );
 };
 

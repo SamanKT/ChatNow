@@ -8,3 +8,15 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+@media only screen and (max-width: 500px) {
+  .mobileWidth {
+    width: 100vw !important;
+    margin: 0 !important;
+    height: 100vh !important;
+  }
+}
+.mobileWidth {
+  width: 70vw;
+  margin-left: 15vw;
+}
