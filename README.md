@@ -24,3 +24,6 @@ THIS PROJECT IS A PROTOTYPE DEVELOPED BY REACTJS AND FIREBASE TECHNOLOGIES. SOME
 ![image](https://github.com/SamanKT/ChatNow/assets/49819814/f9e0be61-6475-479d-957f-3f0e6e6fafe7)
 
 ![image](https://github.com/SamanKT/ChatNow/assets/49819814/2da17f24-e58e-4016-9aaf-154b5906971a)
+
+![image](https://github.com/SamanKT/ChatNow/assets/49819814/df474c43-6c8b-42b1-8002-b803c67fd7cc)
+
