@@ -33,12 +33,12 @@ const Navbar = () => {
           }}
         />
       </Grid>
-      <Grid item xs={7} md={8} sx={{}}>
+      <Grid item xs={6} md={7} sx={{}}>
         <Typography variant="button" noWrap color={"#FFF8DC"}>
           {currentUser.displayName}
         </Typography>
       </Grid>
-      <Grid item xs={3} md={2} sx={{}}>
+      <Grid item xs={4} md={3} sx={{}}>
         <Avatar
           alt="your photo"
           src={currentUser.photoURL}

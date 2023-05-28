@@ -18,10 +18,11 @@ const Message = ({ owner, body, photoUrl, date, image }) => {
     let year = formattedDate.getUTCFullYear() + "";
     year = year.substring(year.length - 2, year.length);
     const month = formattedDate.getMonth() + 1;
-    const day = formattedDate.getDay();
-
+    const day = formattedDate.getDate();
     const hour = formattedDate.getHours();
-    const min = formattedDate.getMinutes();
+    let min = formattedDate.getMinutes();
+    if ((min + "").length === 1) min = "0" + min;
+
     const output = `${year}/${month}/${day} ${hour}:${min}`;
     return output;
   };

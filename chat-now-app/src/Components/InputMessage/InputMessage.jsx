@@ -12,9 +12,14 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-import { db, storage } from "../../Firebase";
+import { db, resizeImageFn, storage } from "../../Firebase";
 import ImageAlert from "../Alerts/ImageAlert";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+  uploadString,
+} from "firebase/storage";
 
 const InputMessage = ({ disableSend }) => {
   const { friend, currentUser } = useContext(ChatContext);
@@ -30,48 +35,61 @@ const InputMessage = ({ disableSend }) => {
       contentType: "image/jpeg",
     };
     const storageRef = ref(storage, "images/" + messageId);
-    const uploadTask = uploadBytesResumable(storageRef, img, metadata);
+    if (img) {
+      const resizedImg = await resizeImageFn(img);
 
-    // Listen for state changes, errors, and completion of the upload.
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {},
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          if (img || text) {
+      const uploadTask = uploadBytesResumable(storageRef, resizedImg, metadata);
+
+      // Listen for state changes, errors, and completion of the upload.
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {},
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             await updateDoc(doc(db, "chats", friend.combinedId), {
               messages: arrayUnion({
                 id: messageId,
                 time: Timestamp.now(),
                 senderId: currentUser.uid,
                 body: text,
-                file: img ? downloadURL : "",
+                file: downloadURL,
               }),
             });
-            const currentUid = currentUser.uid;
-
-            await setDoc(
-              doc(db, "userChats", friend.friend.friendInfo.uid),
-              {
-                [currentUid]: {
-                  lastMessages: {
-                    body: text,
-                    timestamp: serverTimestamp(),
-                  },
-                },
-              },
-              { merge: true }
-            );
-          }
-          setText("");
-          handleClearImgInput();
+          });
+        }
+      );
+    } else {
+      if (text) {
+        await updateDoc(doc(db, "chats", friend.combinedId), {
+          messages: arrayUnion({
+            id: messageId,
+            time: Timestamp.now(),
+            senderId: currentUser.uid,
+            body: text,
+            file: "",
+          }),
         });
       }
+    }
+    const currentUid = currentUser.uid;
+    await setDoc(
+      doc(db, "userChats", friend.friend.friendInfo.uid),
+      {
+        [currentUid]: {
+          lastMessages: {
+            body: text,
+            timestamp: serverTimestamp(),
+            read: false,
+          },
+        },
+      },
+      { merge: true }
     );
+    setText("");
+    handleClearImgInput();
   };
   const handleClearImgInput = () => {
-    console.log("here");
     refToFileInput.current.value = "";
     setImg("");
   };
@@ -103,6 +121,7 @@ const InputMessage = ({ disableSend }) => {
           }}
           value={text}
           onChange={(e) => setText(e.target.value)}
+          disabled={disableSend}
         />
 
         <input

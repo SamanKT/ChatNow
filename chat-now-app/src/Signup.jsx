@@ -12,6 +12,7 @@ import { db } from "./Firebase";
 //import cat1 from "https://firebasestorage.googleapis.com/v0/b/chat-61303.appspot.com/o/default%2Fcat-avatar.jpg?alt=media&token=c250b80d-0a55-481d-afc1-a07e1409a15e";
 import { useNavigate } from "react-router-dom";
 import AlertMUI from "./Components/Alerts/Alert";
+import { DevProfile } from "./Components/DevProfile/DevProfile";
 
 const Signup = () => {
   const [progress, setProgress] = useState(0);
@@ -36,7 +37,6 @@ const Signup = () => {
     fileReader.readAsDataURL(file);
     setImageSelected(true);
   };
-  console.log(passLength);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (passLength < 6) {
@@ -126,187 +126,190 @@ const Signup = () => {
     alignItems: "center",
   };
   return (
-    <div
-      style={{
-        display: "flex",
-
-        justifyContent: "center",
-        backgroundColor: "#103644",
-        width: "100vw",
-        height: "100vh",
-      }}
-    >
-      <Box
-        sx={{
-          bgcolor: "lightblue",
-          height: "400px",
-          width: "350px",
-          borderRadius: "10px",
+    <>
+      <div
+        style={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+
           justifyContent: "center",
-          marginTop: "20vh",
-          boxShadow: "10",
+          backgroundColor: "#103644",
+          width: "100vw",
+          height: "100vh",
         }}
       >
-        <div
-          style={{
-            backgroundColor: "#22A4D4",
+        <Box
+          sx={{
+            bgcolor: "lightblue",
+            height: "400px",
+            width: "350px",
+            borderRadius: "10px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            margin: "50px",
-            width: "80%",
-            height: "80px",
-            borderRadius: "10px",
-            boxShadow:
-              " rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
+            marginTop: "20vh",
+            boxShadow: "10",
           }}
         >
-          <div style={{ display: "flex" }}>
-            <Avatar
-              src={icon}
-              alt=""
-              sx={{
-                borderRadius: "10%",
-                objectFit: "cover",
-                height: "25px",
-                width: "25px",
-                mr: "10px",
-              }}
-            />
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-              {" "}
-              ChatNow!
-            </Typography>
-          </div>
-          <Typography variant="body2" sx={{ mt: "8px" }}>
-            Register
-          </Typography>
-        </div>
-        <form
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "start",
-            alignItems: "center",
-            width: "90%",
-            height: "65%",
-          }}
-          onSubmit={handleSubmit}
-        >
-          <input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Enter your name"
-            required
-            style={inputStyle}
-          />
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Enter your email"
-            required
-            style={inputStyle}
-          />
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="password"
-            minLength={6}
-            required
-            style={inputStyle}
-            onChange={(e) => setPassLength(e.target.value.length)}
-          />
           <div
             style={{
-              border: "none",
-              height: "40px",
-              width: "70%",
-              marginBottom: "10px",
-              borderRadius: "5px",
-              backgroundColor: "white",
+              backgroundColor: "#22A4D4",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
+              justifyContent: "center",
+              margin: "50px",
+              width: "80%",
+              height: "80px",
+              borderRadius: "10px",
+              boxShadow:
+                " rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
             }}
           >
-            <label htmlFor="avatar">
-              {imageSelected ? (
-                <>
-                  {loadingShow ? (
-                    <CircularProgress></CircularProgress>
-                  ) : (
-                    <img
-                      src={previewImage}
-                      alt="your image"
-                      style={{
-                        width: "35px",
-                        height: "35px",
-                        objectFit: "cover",
-                        marginTop: "3px",
-                      }}
-                    ></img>
-                  )}
-                </>
-              ) : (
-                <PortraitIcon
-                  sx={{ cursor: "pointer", width: "40px", mt: "3px" }}
-                ></PortraitIcon>
-              )}
-            </label>
-            <Typography
-              variant="caption"
-              sx={{ color: "gray", ml: "5px", mr: "30px" }}
-            >
-              Add avatar (optional)
+            <div style={{ display: "flex" }}>
+              <Avatar
+                src={icon}
+                alt=""
+                sx={{
+                  borderRadius: "10%",
+                  objectFit: "cover",
+                  height: "25px",
+                  width: "25px",
+                  mr: "10px",
+                }}
+              />
+              <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                {" "}
+                ChatNow!
+              </Typography>
+            </div>
+            <Typography variant="body2" sx={{ mt: "8px" }}>
+              Register
             </Typography>
           </div>
-          <input
-            type="file"
-            name="avatar"
-            id="avatar"
-            hidden
-            accept="image/*"
-            onChange={handleImageSelect}
-          />
-
-          {uploadStarted ? (
-            <CircularProgressWithLabel
-              value={progress}
-              sx={{ zIndex: "3" }}
-            ></CircularProgressWithLabel>
-          ) : (
-            <button
-              type="submit"
+          <form
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "start",
+              alignItems: "center",
+              width: "90%",
+              height: "65%",
+            }}
+            onSubmit={handleSubmit}
+          >
+            <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Enter your name"
+              required
+              style={inputStyle}
+            />
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+              style={inputStyle}
+            />
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="password"
+              minLength={6}
+              required
+              style={inputStyle}
+              onChange={(e) => setPassLength(e.target.value.length)}
+            />
+            <div
               style={{
-                backgroundColor: "#618593",
-                color: "white",
+                border: "none",
+                height: "40px",
                 width: "70%",
-                margin: "10px",
-                fontSize: "12px",
-                height: "25px",
+                marginBottom: "10px",
+                borderRadius: "5px",
+                backgroundColor: "white",
+                display: "flex",
+                alignItems: "center",
               }}
             >
-              Submit
-            </button>
-          )}
+              <label htmlFor="avatar">
+                {imageSelected ? (
+                  <>
+                    {loadingShow ? (
+                      <CircularProgress></CircularProgress>
+                    ) : (
+                      <img
+                        src={previewImage}
+                        alt="your image"
+                        style={{
+                          width: "35px",
+                          height: "35px",
+                          objectFit: "cover",
+                          marginTop: "3px",
+                        }}
+                      ></img>
+                    )}
+                  </>
+                ) : (
+                  <PortraitIcon
+                    sx={{ cursor: "pointer", width: "40px", mt: "3px" }}
+                  ></PortraitIcon>
+                )}
+              </label>
+              <Typography
+                variant="caption"
+                sx={{ color: "gray", ml: "5px", mr: "30px" }}
+              >
+                Add avatar (optional)
+              </Typography>
+            </div>
+            <input
+              type="file"
+              name="avatar"
+              id="avatar"
+              hidden
+              accept="image/*"
+              onChange={handleImageSelect}
+            />
 
-          <Typography variant="caption" sx={{ fontSize: "10px", mb: "8px" }}>
-            <a href="/login">Already registered? click to sign in!</a>
-          </Typography>
-        </form>
-        <AlertMUI
-          open={openAlert.open}
-          mode={openAlert.mode}
-          message={openAlert.message}
-        />
-      </Box>
-    </div>
+            {uploadStarted ? (
+              <CircularProgressWithLabel
+                value={progress}
+                sx={{ zIndex: "3" }}
+              ></CircularProgressWithLabel>
+            ) : (
+              <button
+                type="submit"
+                style={{
+                  backgroundColor: "#618593",
+                  color: "white",
+                  width: "70%",
+                  margin: "10px",
+                  fontSize: "12px",
+                  height: "25px",
+                }}
+              >
+                Submit
+              </button>
+            )}
+
+            <Typography variant="caption" sx={{ fontSize: "10px", mb: "8px" }}>
+              <a href="/login">Already registered? click to sign in!</a>
+            </Typography>
+          </form>
+          <AlertMUI
+            open={openAlert.open}
+            mode={openAlert.mode}
+            message={openAlert.message}
+          />
+        </Box>
+      </div>
+      <DevProfile></DevProfile>
+    </>
   );
 };
 

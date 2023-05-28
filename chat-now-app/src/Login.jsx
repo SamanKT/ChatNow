@@ -13,9 +13,9 @@ import { auth } from "./Firebase";
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import CircularProgressWithLabel from "./Components/LoadingComponent/CircularProgressWithLabel";
 import { storage } from "./Firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import AlertMUI from "./Components/Alerts/Alert";
+import { DevProfile } from "./Components/DevProfile/DevProfile";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -161,6 +161,7 @@ const Login = () => {
         mode={2}
         message={"Invalid Username or Password"}
       />
+      <DevProfile></DevProfile>
     </>
   );
 };

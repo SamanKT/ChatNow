@@ -5,6 +5,7 @@ import Messages from "../Messages/Messages";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import AddIcCallIcon from "@mui/icons-material/AddIcCall";
+import AlertDialog from "../Alerts/AlertDialog";
 
 import {
   AppBar,
@@ -25,6 +26,7 @@ import "../../messageStyles.css";
 const Chat = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const { friend, dispatch } = useContext(ChatContext);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const handlePop = (e) => {
     setAnchorEl(e.currentTarget);
@@ -58,14 +60,14 @@ const Chat = () => {
         <Grid
           item
           xs={6}
-          sm={4}
+          sm={3}
           minWidth={200}
           maxWidth={300}
           sx={{ bgcolor: "#2F4F4F" }}
         >
           <SideBar></SideBar>
         </Grid>
-        <Grid item xs={6} sm={8} minWidth={280} sx={{}}>
+        <Grid item xs={6} sm={9} minWidth={280} sx={{}}>
           <Box
             sx={{
               flexGrow: 1,
@@ -103,8 +105,14 @@ const Chat = () => {
                   disableGutters
                   variant="dense"
                 >
-                  <VideocamIcon sx={{ cursor: "pointer" }} />
-                  <AddIcCallIcon sx={{ ml: "10px", cursor: "pointer" }} />
+                  <VideocamIcon
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => setOpenAlert(!openAlert)}
+                  />
+                  <AddIcCallIcon
+                    sx={{ ml: "10px", cursor: "pointer" }}
+                    onClick={() => setOpenAlert(!openAlert)}
+                  />
                   <Box>
                     <IconButton
                       size="medium"
@@ -137,6 +145,10 @@ const Chat = () => {
           <Messages></Messages>
         </Grid>
       </Grid>
+      <AlertDialog
+        openAlert={openAlert}
+        setOpenAlert={setOpenAlert}
+      ></AlertDialog>
     </div>
   );
 };

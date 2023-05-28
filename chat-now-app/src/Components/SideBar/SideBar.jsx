@@ -9,6 +9,7 @@ import {
   createChatIfNotExistOrGetLastMessage,
   db,
   getAllChatsOfUser,
+  setMessageAsRead,
 } from "../../Firebase";
 import { ChatContext } from "../../Context/ChatContext";
 import "../../messageStyles.css";
@@ -48,6 +49,7 @@ const SideBar = () => {
   };
   const handleSelectFriend = async (selectedUser) => {
     dispatch({ type: "SET_CHAT", payload: selectedUser });
+    setMessageAsRead(currentUser.uid, selectedUser.friendInfo.uid);
   };
   return (
     <>
@@ -91,7 +93,21 @@ const SideBar = () => {
                         src={friends[key]?.friendInfo.photoURL}
                       ></Avatar>
                     }
-                    action={<IconButton aria-label="settings"></IconButton>}
+                    action={
+                      <IconButton aria-label="settings">
+                        <div
+                          className="pulsate-bck"
+                          style={{
+                            width: 10,
+                            height: 10,
+                            borderRadius: 10,
+                            border: "1px solid ",
+                            backgroundColor: "#C32F07",
+                          }}
+                          hidden={friends[key]?.lastMessages.read}
+                        ></div>
+                      </IconButton>
+                    }
                     title={friends[key]?.friendInfo.name}
                     subheader={friends[key]?.lastMessages.body}
                     subheaderTypographyProps={{

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import InputMessage from "../InputMessage/InputMessage";
 import Message from "./Message";
 import { ChatContext } from "../../Context/ChatContext";
-import { db } from "../../Firebase";
+import { db, setMessageAsRead } from "../../Firebase";
 import { doc, onSnapshot } from "firebase/firestore";
 import "../../messageStyles.css";
 const Messages = () => {
@@ -20,7 +20,6 @@ const Messages = () => {
         data = { ...data };
         setMessages(data.messages);
       });
-
       setDisableSend(false);
     } else setDisableSend(true);
 
@@ -35,6 +34,9 @@ const Messages = () => {
         display: "flex",
         flexDirection: "column",
       }}
+      onLoad={async () =>
+        setMessageAsRead(currentUser.uid, friend.friend.friendInfo.uid)
+      }
     >
       <div
         className="scroll"
