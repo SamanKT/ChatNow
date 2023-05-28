@@ -1,4 +1,4 @@
-## ChatNow <img align="left" height="30px" alt="GIF" src="https://github.com/SamanKT/ChatNow/assets/49819814/071856e0-fffc-4dcf-a908-c07e31f9fdd7" /> 
+## ChatNow <img align="left" height="30px" alt="GIF" src="https://github.com/SamanKT/ChatNow/assets/49819814/30e3f559-53fd-42c1-b524-62097d072028" /> 
 
 ### A real time chatting platform (prototype project)
 
@@ -10,20 +10,13 @@ THIS PROJECT IS A PROTOTYPE DEVELOPED BY REACTJS AND FIREBASE TECHNOLOGIES. SOME
 * IMAGE RESIZER ON CLIENT SIDE TO MANAGE THE UPLOADED FILES
 * AUTHENTICATION AND BASIC SECURITY CONFIGURATIONS
 
-<img align="left" height="400px" alt="GIF" src="https://github.com/SamanKT/ChatNow/assets/49819814/ad345633-a34a-4f21-9512-4dc107c2ec13" /> 
-<img align="left" height="400px" alt="GIF" src="https://github.com/SamanKT/ChatNow/assets/49819814/5c567853-091c-49fc-aee7-bc2661c38cb3" /> 
-
-
-
-![image](https://github.com/SamanKT/ChatNow/assets/49819814/223951e7-7bcb-4d61-8d63-df59f0335581)
-
-
-![image](https://github.com/SamanKT/ChatNow/assets/49819814/930adb00-3d85-4b6a-a7ff-1c22eb6c2780)
-
-
-![image](https://github.com/SamanKT/ChatNow/assets/49819814/f9e0be61-6475-479d-957f-3f0e6e6fafe7)
-
-![image](https://github.com/SamanKT/ChatNow/assets/49819814/2da17f24-e58e-4016-9aaf-154b5906971a)
+<img align="left" height="400px" alt="GIF" src="https://github.com/SamanKT/ChatNow/assets/49819814/d3bd5fd8-3ca3-4948-b052-a018f1056434" /> 
+<img align="left" height="400px" alt="GIF" src="https://github.com/SamanKT/ChatNow/assets/49819814/a83559f4-2fe4-4486-84aa-91ea682eb66a" /> 
 
 ![image](https://github.com/SamanKT/ChatNow/assets/49819814/df474c43-6c8b-42b1-8002-b803c67fd7cc)
 
+![image](https://github.com/SamanKT/ChatNow/assets/49819814/3c1d58be-107e-4621-9e8c-acaa5c076400)
+
+![image](https://github.com/SamanKT/ChatNow/assets/49819814/e50ab41b-7b80-44d3-978b-c87009371ae1)
+
+![image](https://github.com/SamanKT/ChatNow/assets/49819814/04a9eef5-5cdc-4506-962e-28f3a894bd80)
