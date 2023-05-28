@@ -1,6 +1,7 @@
 ## ChatNow <img align="left" height="30px" alt="GIF" src="https://github.com/SamanKT/ChatNow/assets/49819814/30e3f559-53fd-42c1-b524-62097d072028" /> 
 
-### A real time chatting platform (prototype project)
+### A real time chatting platform (prototype project) 
+### To test it and chat with the others please use [this link](https://chat-61303.web.app/)  :blush:	
 
 THIS PROJECT IS A PROTOTYPE DEVELOPED BY REACTJS AND FIREBASE TECHNOLOGIES. SOME FEATURES CAN BE LISTED AS:
 * MUI FOR THE COMPONENT STYLING
