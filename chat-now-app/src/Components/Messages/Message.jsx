@@ -1,7 +1,9 @@
 import { Avatar, Typography } from "@mui/material";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import ImageAlert from "../Alerts/ImageAlert";
 
 const Message = ({ owner, body, photoUrl, date, image }) => {
+  const [open, setOpen] = useState(false);
   const style = {
     marginBottom: "30px",
     display: "flex",
@@ -67,6 +69,7 @@ const Message = ({ owner, body, photoUrl, date, image }) => {
           <img
             src={image}
             style={{ width: "150px", alignSelf: "center", borderRadius: 5 }}
+            onClick={() => setOpen(true)}
           ></img>
         </div>
         <Typography
@@ -76,6 +79,13 @@ const Message = ({ owner, body, photoUrl, date, image }) => {
           {getDateWithCustomFormat(date)}
         </Typography>
       </div>
+
+      <ImageAlert
+        img={image}
+        open={open}
+        setOpen={setOpen}
+        disabled="none"
+      ></ImageAlert>
     </div>
   );
 };

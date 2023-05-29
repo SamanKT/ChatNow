@@ -6,7 +6,7 @@ p {
 }
 .container {
   color: #e5e5e5;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   height: 20vh;
   width: 100vw;
@@ -16,7 +16,11 @@ p {
   background-color: #131417;
   font-family: "Roboto";
 }
-
+@media only screen and (max-width: 700px) {
+  .container {
+    display: none;
+  }
+}
 .animation {
   height: 26px;
   overflow: hidden;

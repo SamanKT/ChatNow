@@ -5,7 +5,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useEffect } from "react";
 
 export default function ImageAlert({
   img,
@@ -16,22 +15,32 @@ export default function ImageAlert({
   setOpen,
   setText,
   handleClearImgInput,
+  disabled,
 }) {
   const handleClose = () => {
     setOpen(false);
-    handleClearImgInput();
-    setImg("");
+    if (disabled !== "none") {
+      setImg("");
+      handleClearImgInput();
+    }
   };
   let imgUrl = "";
-  if (img) imgUrl = URL.createObjectURL(img);
+  if (img) {
+    if (disabled !== "none") imgUrl = URL.createObjectURL(img);
+    else imgUrl = img;
+  }
 
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Send Image</DialogTitle>
+        <DialogTitle sx={{ display: disabled }}>Send Image</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <img src={imgUrl} alt="" style={{ width: 200, borderRadius: 3 }} />
+            <img
+              src={imgUrl}
+              alt=""
+              style={{ width: 200, borderRadius: 3, paddingTop: 20 }}
+            />
           </DialogContentText>
           <form action="">
             <TextField
@@ -44,16 +53,20 @@ export default function ImageAlert({
               variant="standard"
               value={text}
               onChange={(e) => setText(e.target.value)}
+              sx={{ display: disabled }}
             />
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose} sx={{ display: disabled }}>
+            Cancel
+          </Button>
           <Button
             onClick={(e) => {
               handleMessageSend(e);
               setOpen(false);
             }}
+            sx={{ display: disabled }}
           >
             Send
           </Button>
